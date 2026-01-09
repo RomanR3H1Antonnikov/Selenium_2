@@ -19,5 +19,5 @@ check_box = driver.find_element(By.XPATH, "//span[@class='rct-checkbox']")
 check_box.click()
 input_check_box = driver.find_element(By.XPATH, "//input[@id='tree-node-home']") # Находим элемент через input, а не span,
 # тк класс вроде span и div всегда будет возвращать False в методе is_selected() (тк не обладает атрибутами <select> или checked)
-assert input_check_box.is_selected() == True, "Чек-бокс не выбран!!"
+assert input_check_box.is_selected(), "Чек-бокс не выбран!!"
 print("Чек-бокс выбран")
