@@ -16,42 +16,24 @@ driver.get(base_url)
 driver.set_window_size(1920, 1080) # Настройка разрешения монитора
 
 
-def add_product_to_card(info_xpath, price_xpath, add_xpath):
+def get_product_info(info_xpath, price_xpath):
     product = driver.find_element(By.XPATH, info_xpath)
     value_product = product.text
 
     price_product = driver.find_element(By.XPATH, price_xpath)
     value_price_product = price_product.text
 
-    select_product = driver.find_element(By.XPATH, add_xpath)
-    select_product.click()
     return value_product, value_price_product
 
 
-def check_cart_product_info(info_xpath, price_xpath, value_product, value_price_product):
-    cart_product = driver.find_element(By.XPATH, info_xpath)
-    value_cart_product = cart_product.text
-    print(value_cart_product)
-    assert value_product == value_cart_product  # Производим проверку названия товара в корзине
+def check_product_info(info_xpath, price_xpath, expected_product, expected_price):
+    actual_product, actual_price = get_product_info(info_xpath, price_xpath)
+    print(f"Название: {actual_product}, Цена: {actual_price}")
 
-    price_cart_product = driver.find_element(By.XPATH, price_xpath)
-    value_price_cart_product = price_cart_product.text
-    print(value_price_cart_product)
-    assert value_price_product == value_price_cart_product  # Производим проверку стоимости товара в корзине
-    return value_cart_product, value_price_cart_product
+    assert actual_product == expected_product, f"Название не совпадает: {actual_product} != {expected_product}"
+    assert actual_price == expected_price, f"Цена не совпадает: {actual_price} != {expected_price}"
 
-
-def check_finish_product_info(info_xpath, price_xpath, value_product, value_price_product):
-    finish_product = driver.find_element(By.XPATH, info_xpath)
-    value_finish_product = finish_product.text
-    print(value_finish_product)
-    assert value_product == value_finish_product  # Производим проверку названия товара в финальном окне обзора
-
-    price_finish_product = driver.find_element(By.XPATH, price_xpath)
-    value_price_finish_product = price_finish_product.text
-    print(value_price_finish_product)
-    assert value_price_finish_product == value_price_product  # Производим проверку цены товара в финальном окне обзора
-    return value_finish_product, value_price_finish_product
+    return actual_product, actual_price
 
 
 user_name = driver.find_element(By.ID, "user-name") # поиск локатора поля ввода имени пользователя по ID
@@ -66,23 +48,28 @@ button_login = driver.find_element(By.ID, "login-button") # поиск лока�
 button_login.click() # Используем метод .click() для авторизации на сайте
 print("Click Login Button")
 
-value_product_1, value_price_product_1 = add_product_to_card("//*[@id='item_4_title_link']/div", "//*[@id='inventory_container']/div/div[1]/div[2]/div[2]/div", "//*[@id='add-to-cart-sauce-labs-backpack']")
+time.sleep(5) # Пауза для нажатия на кнопку "Ок" при всплывающем уведомлении об утечке пароля
+value_product_1, value_price_product_1 = get_product_info("//*[@id='item_4_title_link']/div", "//*[@id='inventory_container']/div/div[1]/div[2]/div[2]/div")
 print(value_product_1 + " = " + value_price_product_1)
+driver.find_element(By.XPATH, "//*[@id='add-to-cart-sauce-labs-backpack']").click() # Добавляем продукт 1 в корзину
 print("Select Product 1")  # Выбираем продукт 1
 
-value_product_2, value_price_product_2 = add_product_to_card("//*[@id='item_0_title_link']/div", "//*[@id='inventory_container']/div/div[2]/div[2]/div[2]/div", "//*[@id='add-to-cart-sauce-labs-bike-light']")
+
+value_product_2, value_price_product_2 = get_product_info("//*[@id='item_0_title_link']/div", "//*[@id='inventory_container']/div/div[2]/div[2]/div[2]/div")
 print(value_product_2 + " = " + value_price_product_2)
+driver.find_element(By.XPATH, "//*[@id='add-to-cart-sauce-labs-bike-light']").click() # Добавляем продукт 2 в корзину
 print("Select Product 2")  # Выбираем продукт 2
+
 
 cart = driver.find_element(By.XPATH, "//*[@id='shopping_cart_container']/a")
 cart.click()
 print("Enter Cart") # Переходим в корзину
 
-value_cart_product_1, value_price_cart_product_1 = check_cart_product_info("//*[@id='item_4_title_link']/div", "//*[@id='cart_contents_container']/div/div[1]/div[3]/div[2]/div[2]/div", value_product_1, value_price_product_1)
+value_cart_product_1, value_price_cart_product_1 = check_product_info("//*[@id='item_4_title_link']/div", "//*[@id='cart_contents_container']/div/div[1]/div[3]/div[2]/div[2]/div", value_product_1, value_price_product_1)
 print(value_cart_product_1 + " / " + value_price_cart_product_1)
 print("Info Cart + Price Cart Product 1 good")  # Отчёт о корректности инфы о продукте 1 в корзине
 
-value_cart_product_2, value_price_cart_product_2 = check_cart_product_info("//*[@id='item_0_title_link']/div", "//*[@id='cart_contents_container']/div/div[1]/div[4]/div[2]/div[2]/div", value_product_2, value_price_product_2)
+value_cart_product_2, value_price_cart_product_2 = check_product_info("//*[@id='item_0_title_link']/div", "//*[@id='cart_contents_container']/div/div[1]/div[4]/div[2]/div[2]/div", value_product_2, value_price_product_2)
 print(value_cart_product_2 + " / " + value_price_cart_product_2)
 print("Info Cart + Price Cart Product 2 good")  # Отчёт о корректности инфы о продукте 2 в корзине
 
@@ -106,11 +93,11 @@ button_continue = driver.find_element(By.XPATH, "//*[@id='continue']")
 button_continue.click()
 print("Click Continue")
 
-value_finish_product_1, value_price_finish_product_1 = check_finish_product_info("//*[@id='item_4_title_link']/div", "//*[@id='checkout_summary_container']/div/div[1]/div[3]/div[2]/div[2]/div", value_product_1, value_price_product_1)
+value_finish_product_1, value_price_finish_product_1 = check_product_info("//*[@id='item_4_title_link']/div", "//*[@id='checkout_summary_container']/div/div[1]/div[3]/div[2]/div[2]/div", value_product_1, value_price_product_1)
 print(value_finish_product_1 + " ; " + value_price_finish_product_1)
 print("Info Finish + Price Finish Product 1 good") # Производим проверку названия и цены товара 1 в финальном окне обзора
 
-value_finish_product_2, value_price_finish_product_2 = check_finish_product_info("//*[@id='item_0_title_link']/div", "//*[@id='checkout_summary_container']/div/div[1]/div[4]/div[2]/div[2]/div", value_product_2, value_price_product_2)
+value_finish_product_2, value_price_finish_product_2 = check_product_info("//*[@id='item_0_title_link']/div", "//*[@id='checkout_summary_container']/div/div[1]/div[4]/div[2]/div[2]/div", value_product_2, value_price_product_2)
 print(value_finish_product_2 + " ; " + value_price_finish_product_2)
 print("Info Finish + Price Finish Product 2 good") # Производим проверку названия и цены товара 2 в финальном окне обзора
 
