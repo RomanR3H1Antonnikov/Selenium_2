@@ -29,8 +29,8 @@ button_login.click() # Используем метод .click() для авто�
 print("Click Login Button")
 
 
-button_add_backpack = driver.find_element(By.XPATH, "//*[@id='add-to-cart-sauce-labs-backpack']").click()
-button_cart_link = driver.find_element(By.XPATH, "//*[@id='shopping_cart_container']/a").click()
+driver.find_element(By.XPATH, "//*[@id='add-to-cart-sauce-labs-backpack']").click()
+driver.find_element(By.XPATH, "//*[@id='shopping_cart_container']/a").click()
 
 time.sleep(2)
 driver.back() # Возвращаемся на страницу каталога с помощью метода back()
