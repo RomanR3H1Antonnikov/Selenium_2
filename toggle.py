@@ -13,17 +13,20 @@ options = webdriver.ChromeOptions()
 options.add_experimental_option("detach", True)
 
 driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
-base_url = "https://html5css.ru/howto/howto_js_rangeslider.php" #Тестовый сайт для Selenium
+base_url = "https://the-internet.herokuapp.com/horizontal_slider" #Тестовый сайт для Selenium
 driver.get(base_url)
 driver.set_window_size(1920, 1080) # Настройка разрешения монитора
 
-actions = ActionChains(driver)
+actions = ActionChains(driver) # Создаём экземпляр класса
 
-slider = driver.find_element(By.XPATH, "//input[@class='slider-color']")
+slider = driver.find_element(By.XPATH, "//input[@type='range']")
 
+start_value = driver.find_element(By.XPATH, "//*[@id='range']").text
 time.sleep(5)
 
-actions.click_and_hold(slider).move_by_offset(-500, 0).release().perform()
+actions.click_and_hold(slider).move_by_offset(50, 0).release().perform() # Перемещаем ползунок с помощью click_and_hold на определённую длину по x и отпускаем с помощью release
+end_value = driver.find_element(By.XPATH, "//*[@id='range']").text
 
-# здесь должна быть реализована проверка, что расстояние перемещения совпадает с тем,
-# которое отображается в соответствующем поле на сайте, однако сервер не позволяет загрузить сайт (скрин прикрепил к ответу на заданию)
+assert float(start_value) != float(end_value), f"Значения положения ползунка совпадают! Первоначальное значение: {start_value}, конечное значение: {end_value}"
+# Проводим проверку, сравнивая начальное и конечное значения
+print("Toggle move good")
