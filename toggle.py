@@ -22,11 +22,31 @@ actions = ActionChains(driver) # Создаём экземпляр класса
 slider = driver.find_element(By.XPATH, "//input[@type='range']")
 
 start_value = driver.find_element(By.XPATH, "//*[@id='range']").text
-time.sleep(5)
+print(f"Начальное значение ползунка: {start_value}")
+time.sleep(2)
 
-actions.click_and_hold(slider).move_by_offset(50, 0).release().perform() # Перемещаем ползунок с помощью click_and_hold на определённую длину по x и отпускаем с помощью release
+pixels_per_step = 129 / ((5.0 - 0.0) / 0.5)
+print(f"Один шаг значения ({0.5}) = {pixels_per_step:.1f} пикселя")
+
+target_value = 5.0
+print(f"Целевое значение для теста: {target_value}")
+
+x = (target_value - 2.5) * (129 / (5.0 - 2.5))
+print(f"Смещение для значения {target_value}: {x:.1f} пикселей")
+
+actions.click_and_hold(slider).move_by_offset(x, 0).release().perform() # Перемещаем ползунок с помощью click_and_hold на определённую длину по x и отпускаем с помощью release
 end_value = driver.find_element(By.XPATH, "//*[@id='range']").text
 
-assert float(start_value) != float(end_value), f"Значения положения ползунка совпадают! Первоначальное значение: {start_value}, конечное значение: {end_value}"
-# Проводим проверку, сравнивая начальное и конечное значения
-print("Toggle move good")
+try:
+    end_value_float = float(end_value)
+    assert round(end_value_float, 1) == target_value, (
+        f"Ползунок установился в неверную позицию! "
+        f"Ожидалось: {target_value}, Получено: {end_value_float}"
+    )
+    print(f"Toggle move good, ползунок в значении {target_value}")
+except ValueError:
+    print("Не удалось преобразовать значение в число!")
+except AssertionError as e:
+    print(f"Тест не прошёл, Ошибка: {e}")
+
+driver.close()
