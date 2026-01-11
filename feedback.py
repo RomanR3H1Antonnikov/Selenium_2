@@ -1,0 +1,46 @@
+import time
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+# Импорт используемых библиотек
+
+# Настройка драйвера
+options = webdriver.ChromeOptions()
+options.add_experimental_option("detach", True)
+
+driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
+base_url = "https://www.lambdatest.com/selenium-playground/simple-form-demo" #Тестовый сайт для Selenium
+driver.get(base_url)
+driver.set_window_size(1920, 1080) # Настройка разрешения монитора
+
+input_message = driver.find_element(By.XPATH, "//input[@id='user-message']")
+message = 'Hello World!'
+input_message.send_keys(message)
+click1_button = driver.find_element(By.XPATH, "//button[@id='showInput']")
+click1_button.click()
+time.sleep(3)
+
+your_message = driver.find_element(By.XPATH, "//*[@id='message']")
+value_message = your_message.text
+assert value_message == message
+print("Значения верны!")
+
+first_value = 123
+second_value = 101
+sum_result = first_value + second_value
+
+input_first_value = driver.find_element(By.XPATH, "//input[@id='sum1']")
+input_first_value.send_keys(first_value)
+input_second_value = driver.find_element(By.XPATH, "//input[@id='sum2']")
+input_second_value.send_keys(second_value)
+
+click2_button = driver.find_element(By.XPATH, "//*[@id='gettotal']/button")
+click2_button.click()
+time.sleep(3)
+
+result = driver.find_element(By.XPATH, "//p[@id='addmessage']")
+value_result = result.text
+assert value_result == str(sum_result)
+print("Values are equal")
