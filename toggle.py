@@ -28,10 +28,10 @@ time.sleep(2)
 pixels_per_step = 129 / ((5.0 - 0.0) / 0.5)
 print(f"Один шаг значения ({0.5}) = {pixels_per_step:.1f} пикселя")
 
-target_value = 5.0
+target_value = 3.0
 print(f"Целевое значение для теста: {target_value}")
 
-x = (target_value - float(start_value)) / 0.5 * pixels_per_step
+x = (target_value - 2.5) * (129 / 5)
 print(f"Смещение для значения {target_value}: {x:.1f} пикселей")
 
 actions.click_and_hold(slider).move_by_offset(x, 0).release().perform() # Перемещаем ползунок с помощью click_and_hold на определённую длину по x и отпускаем с помощью release
