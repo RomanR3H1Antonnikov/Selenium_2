@@ -18,6 +18,12 @@ driver.set_window_size(1920, 1080) # Настройка разрешения м�
 click_drop = driver.find_element(By.XPATH, "//span[@aria-labelledby='select2-country-container']")
 click_drop.click()
 time.sleep(3)
+
 select_country = driver.find_element(By.XPATH, "//li[@class='select2-results__option'][3]")
+aim_country = select_country.text
 select_country.click()
 
+final_country = driver.find_element(By.XPATH, "//span[@class='select2-selection__rendered']").text
+assert aim_country == final_country, f"Значения не совпадают! Выбираемая страна: {aim_country}, выбранная страна: {final_country}"
+
+driver.close()
