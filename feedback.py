@@ -24,7 +24,7 @@ time.sleep(3)
 
 your_message = driver.find_element(By.XPATH, "//*[@id='message']")
 value_message = your_message.text
-assert value_message == message
+assert value_message == message, f"Названия не совпадают! Было написано '{message}', вывелось - '{value_message}'"
 print("Значения верны!")
 
 first_value = 123
