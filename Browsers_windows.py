@@ -25,6 +25,6 @@ new_window = driver.find_element(By.XPATH, "//button[@id='windowButton']")
 new_window.click()
 driver.switch_to.window(driver.window_handles[1])
 time.sleep(2)
-driver.switch_to.window(driver.window_handles[0])
+driver.switch_to.window(driver.window_handles[2])
 
 driver.quit()
