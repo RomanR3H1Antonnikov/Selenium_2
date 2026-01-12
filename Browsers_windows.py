@@ -17,14 +17,15 @@ driver.set_window_size(1920, 1080) # Настройка разрешения м�
 
 new_tab = driver.find_element(By.XPATH, "//button[@id='tabButton']")
 new_tab.click()
-driver.switch_to.window(driver.window_handles[1])
+driver.switch_to.window(driver.window_handles[1]) # Переходим на новую вкладку
 time.sleep(2)
-driver.switch_to.window(driver.window_handles[0])
+driver.switch_to.window(driver.window_handles[0]) #  Возвращаемся на старую вкладку
+time.sleep(3)
 
 new_window = driver.find_element(By.XPATH, "//button[@id='windowButton']")
 new_window.click()
-driver.switch_to.window(driver.window_handles[1])
+driver.switch_to.window(driver.window_handles[2]) # Переходим в новое окно
 time.sleep(2)
-driver.switch_to.window(driver.window_handles[2])
+driver.switch_to.window(driver.window_handles[0]) # Возвращаемся в старое окно
 
 driver.quit()
