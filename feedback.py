@@ -18,8 +18,8 @@ driver.set_window_size(1920, 1080) # Настройка разрешения м�
 input_message = driver.find_element(By.XPATH, "//input[@id='user-message']")
 message = 'Hello World!'
 input_message.send_keys(message)
-click1_button = driver.find_element(By.XPATH, "//button[@id='showInput']")
-click1_button.click()
+first_click_button = driver.find_element(By.XPATH, "//button[@id='showInput']")
+first_click_button.click()
 time.sleep(3)
 
 your_message = driver.find_element(By.XPATH, "//*[@id='message']")
@@ -32,15 +32,17 @@ second_value = 101
 sum_result = first_value + second_value
 
 input_first_value = driver.find_element(By.XPATH, "//input[@id='sum1']")
-input_first_value.send_keys(first_value)
+input_first_value.send_keys(str(first_value))
 input_second_value = driver.find_element(By.XPATH, "//input[@id='sum2']")
-input_second_value.send_keys(second_value)
+input_second_value.send_keys(str(second_value))
 
-click2_button = driver.find_element(By.XPATH, "//*[@id='gettotal']/button")
-click2_button.click()
+second_click_button = driver.find_element(By.XPATH, "//*[@id='gettotal']/button")
+second_click_button.click()
 time.sleep(3)
 
 result = driver.find_element(By.XPATH, "//p[@id='addmessage']")
 value_result = result.text
-assert value_result == str(sum_result)
+assert value_result == str(sum_result), f"Ошибка! Результат ({value_result}) не совпадает с фактической суммой ({sum_result})!"
 print("Values are equal")
+
+driver.close()
