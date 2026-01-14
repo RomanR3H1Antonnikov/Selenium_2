@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="720ce250-b873-4205-b861-65e0d27e4d1b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,11 +45,17 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.BiblFaker.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Browsers_windows.executor&quot;: &quot;Run&quot;,
     &quot;Python.Smoke_testing.executor&quot;: &quot;Run&quot;,
     &quot;Python.asd.executor&quot;: &quot;Run&quot;,
     &quot;Python.checkbox.executor&quot;: &quot;Run&quot;,
+    &quot;Python.drop_down.executor&quot;: &quot;Run&quot;,
+    &quot;Python.feedback.executor&quot;: &quot;Run&quot;,
     &quot;Python.forward-backward.executor&quot;: &quot;Run&quot;,
+    &quot;Python.iframe_usage.executor&quot;: &quot;Run&quot;,
     &quot;Python.radiobutton.executor&quot;: &quot;Run&quot;,
+    &quot;Python.toggle.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;
   }
