@@ -18,49 +18,25 @@ driver.get(base_url)
 driver.set_window_size(1920, 1080) # Настройка разрешения монитора
 
 
-name_locators = {1: "//*[@id='item_4_title_link']/div", 2: "//*[@id='item_0_title_link']/div",
+name_locators = {1: "//*[@id='item_4_title_link']/div",
+                 2: "//*[@id='item_0_title_link']/div",
                  3: "//*[@id='item_1_title_link']/div",
-                 4: "//*[@id='item_5_title_link']/div", 5: "//*[@id='item_2_title_link']/div",
+                 4: "//*[@id='item_5_title_link']/div",
+                 5: "//*[@id='item_2_title_link']/div",
                  6: "//*[@id='item_3_title_link']/div"}
-price_locators = {1: "//*[@id='inventory_container']/div/div[1]/div[2]/div[2]/div",
-                  2: "//*[@id='inventory_container']/div/div[2]/div[2]/div[2]/div",
-                  3: "//*[@id='inventory_container']/div/div[3]/div[2]/div[2]/div",
-                  4: "//*[@id='inventory_container']/div/div[4]/div[2]/div[2]/div",
-                  5: "//*[@id='inventory_container']/div/div[5]/div[2]/div[2]/div",
-                  6: "//*[@id='inventory_container']/div/div[6]/div[2]/div[2]/div"}
 add_to_cart_locators = {1: "//*[@id='add-to-cart-sauce-labs-backpack']",
                         2: "//*[@id='add-to-cart-sauce-labs-bike-light']",
                         3: "//*[@id='add-to-cart-sauce-labs-bolt-t-shirt']",
                         4: "//*[@id='add-to-cart-sauce-labs-fleece-jacket']",
                         5: "//*[@id='add-to-cart-sauce-labs-onesie']",
                         6: "//*[@id='add-to-cart-test.allthethings()-t-shirt-(red)']"}
-cart_name_locators = {1: "//*[@id='item_4_title_link']/div", 2: "//*[@id='item_0_title_link']/div",
-                      3: "//*[@id='item_1_title_link']/div",
-                      4: "//*[@id='item_5_title_link']/div", 5: "//*[@id='item_2_title_link']/div",
-                      6: "//*[@id='item_3_title_link']/div"}
-cart_price_locators = {1: "//*[@id='cart_contents_container']/div/div[1]/div[3]/div[2]/div[2]/div",
-                       2: "//*[@id='cart_contents_container']/div/div[1]/div[4]/div[2]/div[2]/div",
-                       3: "//*[@id='cart_contents_container']/div/div[1]/div[5]/div[2]/div[2]/div",
-                       4: "//*[@id='cart_contents_container']/div/div[1]/div[6]/div[2]/div[2]/div",
-                       5: "//*[@id='cart_contents_container']/div/div[1]/div[7]/div[2]/div[2]/div",
-                       6: "//*[@id='cart_contents_container']/div/div[1]/div[8]/div[2]/div[2]/div"}
-finish_name_locators = {1: "//*[@id='item_4_title_link']/div", 2: "//*[@id='item_0_title_link']/div",
-                        3: "//*[@id='item_1_title_link']/div",
-                        4: "//*[@id='item_5_title_link']/div", 5: "//*[@id='item_2_title_link']/div",
-                        6: "//*[@id='item_3_title_link']/div"}
-finish_price_locators = {1: "//*[@id='checkout_summary_container']/div/div[1]/div[3]/div[2]/div[2]/div",
-                         2: "//*[@id='checkout_summary_container']/div/div[1]/div[4]/div[2]/div[2]/div",
-                         3: "//*[@id='checkout_summary_container']/div/div[1]/div[5]/div[2]/div[2]/div",
-                         4: "//*[@id='checkout_summary_container']/div/div[1]/div[6]/div[2]/div[2]/div",
-                         5: "//*[@id='checkout_summary_container']/div/div[1]/div[7]/div[2]/div[2]/div",
-                         6: "//*[@id='checkout_summary_container']/div/div[1]/div[8]/div[2]/div[2]/div"}
 
 
-def get_product_info(info_xpath, price_xpath):
+def get_product_info(info_xpath, price_info):
     product = driver.find_element(By.XPATH, info_xpath)
     value_product = product.text
 
-    price_product = driver.find_element(By.XPATH, price_xpath)
+    price_product = driver.find_element(By.CLASS_NAME, price_info)
     value_price_product = price_product.text
 
     return value_product, value_price_product
@@ -78,13 +54,12 @@ def check_product_info(info_xpath, price_xpath, expected_product, expected_price
 
 try:
     print("Приветствую тебя в нашем интернет - магазине")
-    print("Выбери один из следующих товаров и укажи его номер: 1 - Sauce Labs Backpack,"
-          " 2 - Sauce Labs Bike Light, 3 - Sauce Labs Bolt T-Shirt, 4 - Sauce Labs Fleece Jacket,"
-          " 5 - Sauce Labs Onesie, 6 - Test.allTheThings() T-Shirt (Red)")
+    print("Выбери один из следующих товаров и укажи его номер:\n 1 - Sauce Labs Backpack,"
+          "\n 2 - Sauce Labs Bike Light,\n 3 - Sauce Labs Bolt T-Shirt,\n 4 - Sauce Labs Fleece Jacket,"
+          "\n 5 - Sauce Labs Onesie,\n 6 - Test.allTheThings() T-Shirt (Red)")
     driver.implicitly_wait(16)
-    choice = int(input())
-    if 1 <= int(choice) <= 6:
-        product_index = choice - 1
+    product_index = int(input())
+    if 1 <= product_index <= 6:
         user_name = driver.find_element(By.ID, "user-name") # поиск локатора поля ввода имени пользователя по ID
         user_name.send_keys('standard_user')
         print("Input Login")
@@ -98,7 +73,7 @@ try:
         print("Click Login Button")
 
         time.sleep(5) # Пауза для нажатия на кнопку "Ок" при всплывающем уведомлении об утечке пароля
-        value_product_1, value_price_product_1 = get_product_info(name_locators[product_index], price_locators[product_index])
+        value_product_1, value_price_product_1 = get_product_info(name_locators[product_index], add_to_cart_locators[product_index])
         print(value_product_1 + " = " + value_price_product_1)
         driver.find_element(By.XPATH, add_to_cart_locators[product_index]).click() # Добавляем продукт в корзину
         print("Select Product 1")  # Выбираем продукт
@@ -108,7 +83,7 @@ try:
         cart.click()
         print("Enter Cart") # Переходим в корзину
 
-        value_cart_product_1, value_price_cart_product_1 = check_product_info(cart_name_locators[product_index], cart_price_locators[product_index], value_product_1, value_price_product_1)
+        value_cart_product_1, value_price_cart_product_1 = check_product_info(name_locators[product_index], add_to_cart_locators[product_index], value_product_1, value_price_product_1)
         print(value_cart_product_1 + " / " + value_price_cart_product_1)
         print("Info Cart + Price Cart Product 1 good")  # Отчёт о корректности инфы о продукте в корзине
 
@@ -139,7 +114,7 @@ try:
         button_continue.click()
         print("Click Continue")
 
-        value_finish_product_1, value_price_finish_product_1 = check_product_info(finish_name_locators[product_index], finish_price_locators[product_index], value_product_1, value_price_product_1)
+        value_finish_product_1, value_price_finish_product_1 = check_product_info(name_locators[product_index], add_to_cart_locators[product_index], value_product_1, value_price_product_1)
         print(value_finish_product_1 + " ; " + value_price_finish_product_1)
         print("Info Finish + Price Finish Product 1 good") # Производим проверку названия и цены товара в финальном окне обзора
 
