@@ -18,25 +18,29 @@ driver.get(base_url)
 driver.set_window_size(1920, 1080) # Настройка разрешения монитора
 
 
-name_locators = {1: "//*[@id='item_4_title_link']/div",
-                 2: "//*[@id='item_0_title_link']/div",
-                 3: "//*[@id='item_1_title_link']/div",
-                 4: "//*[@id='item_5_title_link']/div",
-                 5: "//*[@id='item_2_title_link']/div",
-                 6: "//*[@id='item_3_title_link']/div"}
-add_to_cart_locators = {1: "//*[@id='add-to-cart-sauce-labs-backpack']",
-                        2: "//*[@id='add-to-cart-sauce-labs-bike-light']",
-                        3: "//*[@id='add-to-cart-sauce-labs-bolt-t-shirt']",
-                        4: "//*[@id='add-to-cart-sauce-labs-fleece-jacket']",
-                        5: "//*[@id='add-to-cart-sauce-labs-onesie']",
-                        6: "//*[@id='add-to-cart-test.allthethings()-t-shirt-(red)']"}
+name_locators = {
+    1: "//*[@id='item_4_title_link']/div",
+    2: "//*[@id='item_0_title_link']/div",
+    3: "//*[@id='item_1_title_link']/div",
+    4: "//*[@id='item_5_title_link']/div",
+    5: "//*[@id='item_2_title_link']/div",
+    6: "//*[@id='item_3_title_link']/div",
+}
+add_to_cart_locators = {
+    1: "//*[@id='add-to-cart-sauce-labs-backpack']",
+    2: "//*[@id='add-to-cart-sauce-labs-bike-light']",
+    3: "//*[@id='add-to-cart-sauce-labs-bolt-t-shirt']",
+    4: "//*[@id='add-to-cart-sauce-labs-fleece-jacket']",
+    5: "//*[@id='add-to-cart-sauce-labs-onesie']",
+    6: "//*[@id='add-to-cart-test.allthethings()-t-shirt-(red)']"
+}
 
 
 def get_product_info(info_xpath, price_info):
     product = driver.find_element(By.XPATH, info_xpath)
     value_product = product.text
 
-    price_product = driver.find_element(By.CLASS_NAME, price_info)
+    price_product = driver.find_element(By.XPATH, price_info)
     value_price_product = price_product.text
 
     return value_product, value_price_product
@@ -73,7 +77,7 @@ try:
         print("Click Login Button")
 
         time.sleep(5) # Пауза для нажатия на кнопку "Ок" при всплывающем уведомлении об утечке пароля
-        value_product_1, value_price_product_1 = get_product_info(name_locators[product_index], add_to_cart_locators[product_index])
+        value_product_1, value_price_product_1 = get_product_info(name_locators[product_index], f"//div[@class='inventory_item'][{product_index}]//div[@class='inventory_item_price']")
         print(value_product_1 + " = " + value_price_product_1)
         driver.find_element(By.XPATH, add_to_cart_locators[product_index]).click() # Добавляем продукт в корзину
         print("Select Product 1")  # Выбираем продукт
@@ -83,7 +87,7 @@ try:
         cart.click()
         print("Enter Cart") # Переходим в корзину
 
-        value_cart_product_1, value_price_cart_product_1 = check_product_info(name_locators[product_index], add_to_cart_locators[product_index], value_product_1, value_price_product_1)
+        value_cart_product_1, value_price_cart_product_1 = check_product_info(name_locators[product_index], f"//div[@class='inventory_item_price']", value_product_1, value_price_product_1)
         print(value_cart_product_1 + " / " + value_price_cart_product_1)
         print("Info Cart + Price Cart Product 1 good")  # Отчёт о корректности инфы о продукте в корзине
 
@@ -98,23 +102,19 @@ try:
         surname = fake.last_name()  # Генерируем случайную фамилию
         postal = fake.postalcode()  # Генерируем случайный postal code
 
-        first_name = driver.find_element(By.XPATH, "//*[@id='first-name']")
-        first_name.send_keys(name)
+        driver.find_element(By.XPATH, "//*[@id='first-name']").send_keys(name)
         print("Input First Name")
 
-        last_name = driver.find_element(By.XPATH, "//*[@id='last-name']")
-        last_name.send_keys(surname)
+        driver.find_element(By.XPATH, "//*[@id='last-name']").send_keys(surname)
         print("Input Last Name")
 
-        postal_code = driver.find_element(By.XPATH, "//*[@id='postal-code']")
-        postal_code.send_keys(postal)
+        driver.find_element(By.XPATH, "//*[@id='postal-code']").send_keys(postal)
         print("Input Postal Code")
 
-        button_continue = driver.find_element(By.XPATH, "//*[@id='continue']")
-        button_continue.click()
+        driver.find_element(By.XPATH, "//*[@id='continue']").click()
         print("Click Continue")
 
-        value_finish_product_1, value_price_finish_product_1 = check_product_info(name_locators[product_index], add_to_cart_locators[product_index], value_product_1, value_price_product_1)
+        value_finish_product_1, value_price_finish_product_1 = check_product_info(name_locators[product_index], f"//div[@class='inventory_item_price']", value_product_1, value_price_product_1)
         print(value_finish_product_1 + " ; " + value_price_finish_product_1)
         print("Info Finish + Price Finish Product 1 good") # Производим проверку названия и цены товара в финальном окне обзора
 
