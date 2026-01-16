@@ -7,43 +7,52 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-options = webdriver.ChromeOptions()
-options.add_experimental_option("detach", True)
 
-class Test(): # общий класс, который будет содержать метод для работы в данном тесте
+class Test: # общий класс, который будет содержать метод для работы в данном тесте
 
-    def test_select_product(self):
-        driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
+
+    def __init__(self):
+        self.driver = None
+
+
+    def test_open_website(self):
+        options = webdriver.ChromeOptions()
+        options.add_experimental_option("detach", True)
+        self.driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
         base_url = 'https://www.saucedemo.com/'
-        driver.get(base_url)
-        driver.set_window_size(1920, 1080)
+        self.driver.get(base_url)
+        self.driver.set_window_size(1920, 1080)
 
-        user_name = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='user-name']")))
-        user_name.send_keys("standard_user")
+
+    def test_website_authorization(self):
+        WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='user-name']"))).send_keys("standard_user")
         print("Input User Name")
 
-        password = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='password']")))
-        password.send_keys("secret_sauce")
+        WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='password']"))).send_keys("secret_sauce")
         print("Input Password")
 
-        button_login = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='login-button']")))
-        button_login.click()  # Используем метод .click() для авторизации на сайте
+        WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='login-button']"))).click()  # Используем метод .click() для авторизации на сайте
         print("Click Login Button")
 
         time.sleep(3)
 
-        select_product = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='add-to-cart-sauce-labs-backpack']")))
-        select_product.click()
+
+    def test_select_product(self):
+        WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='add-to-cart-sauce-labs-backpack']"))).click()
         print("Click Select Product")
 
-        cart = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//*[@class='shopping_cart_link']")))
-        cart.click()
+        WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//*[@class='shopping_cart_link']"))).click()
         print("Enter Shopping Cart")  # Переходим в корзину
 
-        success_test = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//span[@class='title']")))
-        value_success_test = success_test.text
-        assert value_success_test == 'Your Cart'
+        value_success_test = WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//span[@class='title']"))).text
+        assert value_success_test == 'Your Cart', "Ошибка! Вход в корзину не выполнен!"
         print("Test Success")
 
+
 start_test = Test() # создаём экземпляр класса
-start_test.test_select_product() # вызов метода класса
+try:
+    start_test.test_open_website()
+    start_test.test_website_authorization()  # вызов метода класса
+    start_test.test_select_product()
+except Exception as e:
+    print(f"Произошла ошибка: {e}")
