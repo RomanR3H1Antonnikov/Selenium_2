@@ -20,6 +20,7 @@ class Test(): # общий класс, который будет содержа�
 
         user_name = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='user-name']")))
         user_name.send_keys("standard_user")
+        print("Input User Name")
 
         password = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='password']")))
         password.send_keys("secret_sauce")
@@ -28,7 +29,7 @@ class Test(): # общий класс, который будет содержа�
         button_login = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='login-button']")))
         button_login.click()  # Используем метод .click() для авторизации на сайте
         print("Click Login Button")
-        
+
         time.sleep(3)
 
         select_product = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='add-to-cart-sauce-labs-backpack']")))
