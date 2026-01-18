@@ -47,7 +47,7 @@ class Test:
         base_url = 'https://www.saucedemo.com/'
         self.navigate_to_url(base_url)
         self.set_window_size(1920, 1080)
-        
+
 
     def test_login(self):
         login = LoginPage(self.driver)
